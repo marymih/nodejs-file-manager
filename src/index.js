@@ -4,6 +4,8 @@ import { goUp } from './commands/navigation/goUp.js';
 import { changeDirectory } from './commands/navigation/changeDirectory.js';
 import { listDirectory } from './commands/navigation/listDirectory.js';
 import { readFile } from './commands/fileSystem/readFile.js';
+import { addFile } from './commands/fileSystem/addFile.js';
+import { createDirectory } from './commands/fileSystem/createDirectory.js';
 import { showCurrentDirectory } from './helper.js';
 
 const args = process.argv.slice(2);
@@ -48,6 +50,12 @@ rl.on('line', async (input) => {
         break;
       case 'cat':
         await readFile(argument);
+        break;
+      case 'add':
+        await addFile(argument);
+        break;
+      case 'mkdir':
+        await createDirectory(argument);
         break;
       case '.exit':
         rl.close();
