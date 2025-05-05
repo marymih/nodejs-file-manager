@@ -1,6 +1,6 @@
 import readline from 'readline';
 import { getState, setState } from "./state.js";
-import { goUp, changeDirectory } from './commands/navigation.js';
+import { goUp, changeDirectory, listDirectory } from './commands/navigation.js';
 import { showCurrentDirectory } from './helper.js';
 
 const args = process.argv.slice(2);
@@ -37,6 +37,8 @@ rl.on('line', (input) => {
   } else if (trimmedInput.startsWith('cd')) {
     const inputPath = trimmedInput.slice(3).trim();
     changeDirectory(inputPath);
+  } else if (trimmedInput === 'ls') {
+    listDirectory();
   }
 });
 
