@@ -1,5 +1,7 @@
 import readline from 'readline';
 import { getState, setState } from "./state.js";
+import { goUp } from './commands/navigation.js';
+import { showCurrentDirectory } from './helper.js';
 
 const args = process.argv.slice(2);
 
@@ -11,7 +13,7 @@ try {
   }
   setState({ username });
   console.log(`Welcome to the File Manager, ${username}!`);
-  console.log(`You are currently in ${getState().currentDirectory}`);
+  showCurrentDirectory();
 } catch (err) {
   console.error(err.message);
   process.exit(1);
@@ -23,11 +25,15 @@ const rl = readline.createInterface({
 });
 
 rl.on('line', (input) => {
-  if (input.trim() === '.exit') {
+  const trimmedInput = input.trim();
+
+  if (trimmedInput === '.exit') {
     const { username } = getState();
     console.log(`Thank you for using File Manager, ${username}, goodbye!`);
     rl.close();
     process.exit(0);
+  } else if (trimmedInput === 'up') {
+    goUp();
   }
 });
 
