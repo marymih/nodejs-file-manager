@@ -17,14 +17,17 @@ const args = process.argv.slice(2);
 try {
   const parsedArg = args.find((arg) => arg.startsWith('--username='));
   const username = parsedArg?.split('=')[1];
-  if (!username) {
-    throw new Error('Invalid input');
+
+  if (!username || username.trim() === '') {
+    console.log('Invalid input');
+    process.exit(1);
   }
+
   setState({ username });
   console.log(`Welcome to the File Manager, ${username}!`);
   showCurrentDirectory();
 } catch (err) {
-  console.error(err.message);
+  console.log('Operation failed');
   process.exit(1);
 }
 
