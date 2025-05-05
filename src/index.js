@@ -6,6 +6,8 @@ import { listDirectory } from './commands/navigation/listDirectory.js';
 import { readFile } from './commands/fileSystem/readFile.js';
 import { addFile } from './commands/fileSystem/addFile.js';
 import { createDirectory } from './commands/fileSystem/createDirectory.js';
+import { renameFile } from './commands/fileSystem/renameFile.js';
+import { copyFile } from './commands/fileSystem/copyFile.js';
 import { showCurrentDirectory } from './helper.js';
 
 const args = process.argv.slice(2);
@@ -56,6 +58,22 @@ rl.on('line', async (input) => {
         break;
       case 'mkdir':
         await createDirectory(argument);
+        break;
+      case 'rn':
+        const [oldName, newName] = args;
+        if (!oldName || !newName) {
+          console.log('Invalid input');
+          break;
+        }
+        await renameFile(oldName, newName);
+        break;
+      case 'cp':
+        const [source, destination] = args;
+        if (!source || !destination) {
+          console.log('Invalid input');
+          break;
+        }
+        await copyFile(source, destination);
         break;
       case '.exit':
         rl.close();
