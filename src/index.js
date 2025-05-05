@@ -8,6 +8,8 @@ import { addFile } from './commands/fileSystem/addFile.js';
 import { createDirectory } from './commands/fileSystem/createDirectory.js';
 import { renameFile } from './commands/fileSystem/renameFile.js';
 import { copyFile } from './commands/fileSystem/copyFile.js';
+import { moveFile } from './commands/fileSystem/moveFile.js';
+import { removeFile } from './commands/fileSystem/removeFile.js';
 import { showCurrentDirectory } from './helper.js';
 
 const args = process.argv.slice(2);
@@ -47,19 +49,23 @@ rl.on('line', async (input) => {
       case 'cd':
         changeDirectory(argument);
         break;
-      case 'ls':
+      case 'ls': {
         await listDirectory();
         break;
-      case 'cat':
+      }
+      case 'cat': {
         await readFile(argument);
         break;
-      case 'add':
+      }
+      case 'add': {
         await addFile(argument);
         break;
-      case 'mkdir':
+      }
+      case 'mkdir': {
         await createDirectory(argument);
         break;
-      case 'rn':
+      }
+      case 'rn': {
         const [oldName, newName] = args;
         if (!oldName || !newName) {
           console.log('Invalid input');
@@ -67,7 +73,8 @@ rl.on('line', async (input) => {
         }
         await renameFile(oldName, newName);
         break;
-      case 'cp':
+      }
+      case 'cp': {
         const [source, destination] = args;
         if (!source || !destination) {
           console.log('Invalid input');
@@ -75,6 +82,20 @@ rl.on('line', async (input) => {
         }
         await copyFile(source, destination);
         break;
+      }
+      case 'mv': {
+        const [source, destination] = args;
+        if (!source || !destination) {
+          console.log('Invalid input');
+          break;
+        }
+        await moveFile(source, destination);
+        break;
+      }
+      case 'rm': {
+        await removeFile(argument);
+        break;
+      }
       case '.exit':
         rl.close();
         break;

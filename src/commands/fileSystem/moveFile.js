@@ -1,11 +1,11 @@
 import fs from 'fs';
-import { access } from 'fs/promises';
+import { access, unlink } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
 import path from 'path';
 import { getState } from '../../state.js';
 import { showCurrentDirectory } from '../../helper.js';
 
-async function copyFile(source, destination) {
+async function moveFile(source, destination) {
   try {
     const { currentDirectory } = getState();
     const sourcePath = path.resolve(currentDirectory, source);
@@ -19,17 +19,18 @@ async function copyFile(source, destination) {
     const readStream = createReadStream(sourcePath);
     const writeStream = createWriteStream(filePath);
 
-    readStream.pipe(writeStream);
-    readStream.on('end', showCurrentDirectory);
-    readStream.on('error', () => {
-      console.log('Operation failed');
+    await new Promise((resolve, reject) => {
+      readStream.pipe(writeStream);
+      readStream.on('error', reject);
+      writeStream.on('error', reject);
+      writeStream.on('finish', resolve);
     });
-    writeStream.on('error', () => {
-      console.log('Operation failed');
-    });
+
+    await unlink(sourcePath);
+    showCurrentDirectory();
   } catch (err) {
     console.log('Operation failed');
   }
 }
 
-export { copyFile };
+export { moveFile };
