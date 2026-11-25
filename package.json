@@ -1,7 +1,7 @@
 {
   "name": "nodejs-file-manager",
   "version": "1.0.0",
-  "description": "",
+  "description": "Command-line file manager in plain Node.js (RS School course task)",
   "main": "index.js",
   "type": "module",
   "scripts": {
